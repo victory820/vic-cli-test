@@ -5,6 +5,9 @@
   "author": "victor <victor.chen@geekbang.org>",
   "homepage": "",
   "license": "ISC",
+  "bin": {
+    "vic-cli-test": "bin/index.js"
+  },
   "main": "lib/core.js",
   "directories": {
     "lib": "lib",
@@ -15,5 +18,8 @@
   ],
   "scripts": {
     "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "publishConfig": {
+    "access": "public"
   }
 }
