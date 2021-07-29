@@ -1,0 +1,41 @@
+{
+  "name": "@vic-cli-test/core",
+  "version": "1.0.1",
+  "description": "核心模块",
+  "author": "victor <victor.chen@geekbang.org>",
+  "homepage": "",
+  "license": "ISC",
+  "bin": {
+    "vic-cli-test": "bin/index.js"
+  },
+  "main": "lib/core.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "devDependencies": {
+    "@vic-cli-test/log": "file://../../utils/log",
+    "@vic-cli-test/utils": "file://../../utils/utils",
+    "@vic-cli-test/get-npm-info": "file://../../utils/get-npm-info"
+  },
+  "dependencies": {
+    "colors": "^1.4.0",
+    "dotenv": "^10.0.0",
+    "import-local": "^3.0.2",
+    "minimist": "^1.2.5",
+    "npmlog": "^5.0.0",
+    "path-exists": "^4.0.0",
+    "root-check": "1.0.0",
+    "semver": "^7.3.5",
+    "user-home": "^3.0.0"
+  }
+}
