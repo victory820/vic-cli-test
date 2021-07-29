@@ -32,11 +32,15 @@ async function checkGlobalUpdate () {
   const currentVersion = pkg.version
   const npmName = pkg.name
   // 2调用npm API获取所有版本号
-  const { getNpmVersions } = require('@vic-cli-test/get-npm-info')
-  const versions = await getNpmVersions(npmName)
-  console.log(versions)
+  const { getNpmSemverVersion } = require('@vic-cli-test/get-npm-info')
+  const lastVersion = await getNpmSemverVersion(currentVersion, npmName)
   // 3提取所有版本号，比对哪些版本号是大于当前版本号
   // 4获取最新的版本号，提示用户更新
+  console.log('last', lastVersion)
+  if (lastVersion && semver.gt(lastVersion, currentVersion)) {
+    log.warn('更新提示', colors.yellow(`请手动更新 ${npmName}, 当前版本：${currentVersion}, 最新版本：${lastVersion}
+    更新命令：npm install -g ${npmName}`))
+  }
 }
 
 // 检查环境变量

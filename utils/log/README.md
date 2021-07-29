@@ -1,11 +1,11 @@
-# `core`
+# `@vic-cli-test/log`
 
 > TODO: description
 
 ## Usage
 
 ```
-const core = require('core');
+const log = require('@vic-cli-test/log');
 
 // TODO: DEMONSTRATE API
 ```
