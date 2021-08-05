@@ -30,7 +30,7 @@ class Package {
     if (this.packageVersion === 'latest') {
       this.packageVersion = await getNpmLatestVersion(this.packageName)
     }
-    console.log('--99')
+    console.log('--99--')
     console.log(this.packageVersion)
   }
   // 判断当前package是否存在
