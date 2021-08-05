@@ -1,6 +1,6 @@
 {
   "name": "@vic-cli-test/core",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "核心模块",
   "author": "victor <victor.chen@geekbang.org>",
   "homepage": "",
@@ -25,9 +25,9 @@
   "devDependencies": {
     "@vic-cli-test/exec": "file://../exec",
     "@vic-cli-test/get-npm-info": "file://../../utils/get-npm-info",
+    "@vic-cli-test/init": "file://../../commands/init",
     "@vic-cli-test/log": "file://../../utils/log",
-    "@vic-cli-test/utils": "file://../../utils/utils",
-    "@vic-cli-test/init": "file://../../commands/init"
+    "@vic-cli-test/utils": "file://../../utils/utils"
   },
   "dependencies": {
     "colors": "^1.4.0",
