@@ -1,6 +1,6 @@
 {
   "name": "@vic-cli-test/exec",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "description": "exec package",
   "author": "victor <victor.chen@geekbang.org>",
   "homepage": "https://github.com/victory820/vic-cli-test#readme",
@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@vic-cli-test/log": "^1.0.2",
-    "@vic-cli-test/package": "^1.0.5"
+    "@vic-cli-test/package": "^1.0.6"
   },
   "gitHead": "592ac8e58fa24b02fb3ccde4e7dfd0aa2847a7ff"
 }
