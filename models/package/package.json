@@ -29,10 +29,11 @@
   "dependencies": {
     "@vic-cli-test/format-path": "file://../../utils/format-path",
     "@vic-cli-test/get-npm-info": "file://../../utils/get-npm-info",
-    "@vic-cli-test/utils": "file://../../utils/utils",
+    "@vic-cli-test/utils": "^1.0.2",
     "fs-extra": "^7.0.1",
     "npminstall": "^4.11.0",
     "path-exists": "^4.0.0",
     "pkg-dir": "^5.0.0"
-  }
+  },
+  "gitHead": "592ac8e58fa24b02fb3ccde4e7dfd0aa2847a7ff"
 }

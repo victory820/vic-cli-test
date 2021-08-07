@@ -23,11 +23,11 @@
     "access": "public"
   },
   "devDependencies": {
-    "@vic-cli-test/exec": "file://../exec",
+    "@vic-cli-test/exec": "^1.0.5",
     "@vic-cli-test/get-npm-info": "file://../../utils/get-npm-info",
-    "@vic-cli-test/init": "file://../../commands/init",
-    "@vic-cli-test/log": "file://../../utils/log",
-    "@vic-cli-test/utils": "file://../../utils/utils"
+    "@vic-cli-test/init": "^1.0.4",
+    "@vic-cli-test/log": "^1.0.2",
+    "@vic-cli-test/utils": "^1.0.2"
   },
   "dependencies": {
     "colors": "^1.4.0",
@@ -39,5 +39,6 @@
     "root-check": "1.0.0",
     "semver": "^7.3.5",
     "user-home": "^3.0.0"
-  }
+  },
+  "gitHead": "592ac8e58fa24b02fb3ccde4e7dfd0aa2847a7ff"
 }
