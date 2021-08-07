@@ -35,8 +35,10 @@ async function exec() {
       packageName,
       packageVersion
     })
-    if (pkg.exists()) {
+    if (await pkg.exists()) {
       // 更新package
+      console.log('更新pkg')
+      await pkg.update()
     } else {
       // 安装package
       await pkg.install()

@@ -3,6 +3,7 @@ const path = require('path')
 const pkgDir = require('pkg-dir').sync
 const npminstall = require('npminstall')
 const pathExists = require('path-exists').sync
+const fse = require('fs-extra')
 
 const { isObject } = require('@vic-cli-test/utils')
 const formatPath = require('@vic-cli-test/format-path')
@@ -24,19 +25,34 @@ class Package {
     this.packageName = options.packageName
     // package的version
     this.packageVersion = options.packageVersion
+    // package缓存目录前缀
+    this.cacheFilePathPrefix = this.packageName.replace('/', '_')
   }
 
   async prepare () {
+    console.log('更新', this.storeDir)
+    if (this.storeDir && !pathExists(this.storeDir)) {
+      // 不存在就创建
+      fse.mkdirSync(this.storeDir)
+    }
     if (this.packageVersion === 'latest') {
       this.packageVersion = await getNpmLatestVersion(this.packageName)
     }
-    console.log('--99--')
-    console.log(this.packageVersion)
   }
+
+  get cacheFilePath () {
+    return path.resolve(this.storeDir, `_${this.cacheFilePathPrefix}@${this.packageVersion}@${this.packageName}`)
+  }
+
+  getSpecificCacheFilePath (packageVersion) {
+    return path.resolve(this.storeDir, `_${this.cacheFilePathPrefix}@${packageVersion}@${this.packageName}`)
+  }
+
   // 判断当前package是否存在
   async exists () {
     if (this.storeDir) { // 有缓存文件
       await this.prepare()
+      return pathExists(this.cacheFilePath)
     } else {
       return pathExists(this.targetPath)
     }
@@ -44,6 +60,7 @@ class Package {
 
   // 安装package
   install () {
+    this.prepare()
     return npminstall({
       root: this.targetPath,
       storeDir: this.storeDir,
@@ -58,8 +75,27 @@ class Package {
   }
 
   // 更新
-  update () {
-
+  async update () {
+    await this.prepare()
+    // 1获取最新的npm模块版本
+    const latestPackageVersion = await getNpmLatestVersion(this.packageName)
+    // 2查询最新版本号对应的路径是否存在
+    const latestFilePath = this.getSpecificCacheFilePath(latestPackageVersion)
+    // 3如果不存在直接安装
+    if (!pathExists(latestFilePath)) {
+      await npminstall({
+        root: this.targetPath,
+        storeDir: this.storeDir,
+        registry: getDefaultRegistry(),
+        pkgs: [
+          {
+            name: this.packageName,
+            version: latestPackageVersion
+          }
+        ]
+      })
+      this.packageVersion = latestPackageVersion
+    }
   }
 
   // 获取入口文件的路径

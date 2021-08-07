@@ -10,9 +10,7 @@ function getNpmInfo(npmName, registry) {
   }
   const registryUrl = registry || getDefaultRegistry()
   const npmInfoUrl = urlJoin(registryUrl, npmName)
-  console.log('--66', npmInfoUrl)
   return axios.get(npmInfoUrl).then(response => {
-    console.log('--55', response)
     if (response.status === 200) {
       return response.data
     }
@@ -27,7 +25,6 @@ function getDefaultRegistry (isOriginal = false) {
 }
 
 async function getNpmVersions (npmName, registry) {
-  console.log('--77')
   const data = await getNpmInfo(npmName, registry)
   if (data) {
     return Object.keys(data.versions)
@@ -51,8 +48,6 @@ async function getNpmSemverVersion (baseVersion, npmName, registry) {
 
 async function getNpmLatestVersion (npmName, registry) {
   let versions = await getNpmVersions(npmName, registry)
-  console.log('--88')
-  console.log(versions)
   if (versions) {
     return versions.sort((a, b) => semver.gt(b, a))[0]
   }
