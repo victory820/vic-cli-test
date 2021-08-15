@@ -4,15 +4,14 @@ const semver = require('semver')
 const colors = require('colors/safe')
 const userHome = require('user-home')
 const pathExists = require('path-exists').sync
-const { Command } = require('commander')
+const commander = require('commander')
 
 const log = require('@vic-cli-test/log')
-// const init = require('@vic-cli-test/init')
 const exec = require('@vic-cli-test/exec')
 const constant = require('./const')
 const pkg = require('../package.json')
 
-const program = new Command()
+const program = new commander.Command()
 
 async function core() {
   try {
@@ -73,7 +72,6 @@ function registerCommand () {
 
 async function prepare () {
   checkPkgVersion()
-  checkNodeVersion()
   checkRoot()
   checkUserHome()
   checkEnv()
@@ -132,17 +130,6 @@ function checkRoot () {
   // 处理后不管是root启动还是指定账户启动，都一样
   const rootCheck = require('root-check')
   rootCheck()
-}
-
-// 检查node版本，防止低版本API无法使用
-function checkNodeVersion () {
-  // 获取当前版本
-  const currentVersion = process.version
-  // 是否满足最低版本要求
-  const lowestVersion = constant.LOWEST_NODE_VERSION
-  if (!semver.gte(currentVersion, lowestVersion)) {
-    throw new Error(colors.red(`脚手架需要 v${lowestVersion} 以上版本的nodejs`))
-  }
 }
 
 // 检查包版本，用来判断是否为最新

@@ -25,5 +25,20 @@
   },
   "bugs": {
     "url": "https://github.com/victory820/vic-cli-test/issues"
+  },
+  "dependencies": {
+    "@vic-cli-test/command": "file:../../models/command",
+    "@vic-cli-test/log": "file:../../utils/log",
+    "@vic-cli-test/package": "file:../../models/package",
+    "@vic-cli-test/request": "file:../../utils/request",
+    "@vic-cli-test/utils": "file:../../utils/utils",
+    "ejs": "^3.1.5",
+    "fs-extra": "^9.0.1",
+    "glob": "^7.1.6",
+    "inquirer": "^7.3.3",
+    "kebab-case": "^1.0.0",
+    "semver": "^7.3.4",
+    "spinner": "^0.3.4",
+    "user-home": "^2.0.0"
   }
 }

@@ -30,7 +30,6 @@ class Package {
   }
 
   async prepare () {
-    console.log('更新', this.storeDir)
     if (this.storeDir && !pathExists(this.storeDir)) {
       // 不存在就创建
       fse.mkdirSync(this.storeDir)
@@ -59,8 +58,8 @@ class Package {
   }
 
   // 安装package
-  install () {
-    this.prepare()
+  async install () {
+    await this.prepare()
     return npminstall({
       root: this.targetPath,
       storeDir: this.storeDir,
@@ -95,23 +94,31 @@ class Package {
         ]
       })
       this.packageVersion = latestPackageVersion
+    } else {
+      this.packageVersion = latestPackageVersion
     }
   }
 
   // 获取入口文件的路径
   getRootFilePath () {
-    // 获取package.json所在目录
-    const dir = pkgDir(this.targetPath)
-    if (dir) {
-      // 读取package.json
-      const pkgFile = require(path.resolve(dir, 'package.json'))
-      // 寻找main/lib
-      if (pkgFile && pkgFile.main) {
-        // 路径的兼容（macOS/windows）
-        return formatPath(path.resolve(dir, pkgFile.main))
+    function _getRootFile(targetPath) {
+      // 获取package.json所在目录
+      const dir = pkgDir(targetPath)
+      if (dir) {
+        // 读取package.json
+        const pkgFile = require(path.resolve(dir, 'package.json'))
+        if (pkgFile && pkgFile.main) {
+          // 路径的兼容
+          return formatPath(path.resolve(dir, pkgFile.main))
+        }
       }
+      return null
     }
-    return null
+    if (this.storeDir) {
+      return _getRootFile(this.cacheFilePath)
+    } else {
+      return _getRootFile(this.targetPath)
+    }
   }
 }
 

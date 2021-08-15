@@ -27,8 +27,9 @@
     "url": "https://github.com/victory820/vic-cli-test/issues"
   },
   "dependencies": {
-    "@vic-cli-test/log": "^1.0.2",
-    "@vic-cli-test/package": "^1.0.6"
+    "@vic-cli-test/log": "file:../../utils/log",
+    "@vic-cli-test/package": "file:../../models/package",
+    "@vic-cli-test/utils": "file:../../utils/utils"
   },
   "gitHead": "592ac8e58fa24b02fb3ccde4e7dfd0aa2847a7ff"
 }
