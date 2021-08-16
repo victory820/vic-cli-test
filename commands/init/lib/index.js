@@ -71,9 +71,53 @@ class InitCommand extends Command {
     }
   }
 
+  checkCommand (cmd) {
+    if (WHITE_COMMAND.includes(cmd)) {
+      return cmd
+    }
+    return null
+  }
+
+  async execCommand (command, errMsg) {
+    let ret
+    if (command) {
+      const cmdArray = command.split(' ')
+      const cmd = this.checkCommand(cmdArray[0])
+      if (!cmd) {
+        throw new Error('命令不存在！命令：' + command)
+      }
+      const args = cmdArray.slice(1)
+      ret = await execAsync(cmd, args, {
+        stdio: 'inherit',
+        cwd: process.cwd()
+      })
+    }
+    if (ret !== 0) {
+      throw new Error(errMsg)
+    }
+    return ret
+  }
 
   async installNormalTemplate() {
-    console.log('===111,普通模板,')
+    let spinner = spinnerStart('正在安装模板...')
+    await sleep()
+    try {
+      const templatePath = path.resolve(this.templateNpm.cacheFilePath, 'template')
+      const targetPath = process.cwd()
+      fse.ensureDirSync(templatePath)
+      fse.ensureDirSync(targetPath)
+      fse.copySync(templatePath, targetPath)
+    } catch (error) {
+      throw error
+    } finally {
+      spinner.stop(true)
+      log.success('模板安装成功')
+    }
+    // 依赖安装
+    const { installCommand, startCommand } = this.templateInfo
+    await this.execCommand(installCommand, '依赖安装过程中失败')
+    // 启动命令执行
+    await this.execCommand(startCommand, '执行安装过程中失败')
   }
 
   async installCustomTemplate() {
