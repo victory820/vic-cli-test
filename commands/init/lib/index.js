@@ -98,6 +98,39 @@ class InitCommand extends Command {
     return ret
   }
 
+  async ejsRender (options) {
+    const dir = process.cwd()
+    const projectInfo = this.projectInfo
+    return new Promise((resolve, reject) => {
+      glob('**', {
+        cwd: dir,
+        ignore: options.ignore || '',
+        nodir: true
+      }, (err, files) => {
+        if (err) {
+          reject(err)
+        }
+        Promise.all(files.map(file => {
+          const filePath = path.join(dir, file)
+          return new Promise((resolve1, reject1) => {
+            ejs.renderFile(filePath, projectInfo, {}, (err, result) => {
+              if (err) {
+                reject1(err)
+              } else {
+                fse.writeFileSync(filePath, result)
+                resolve1(result)
+              }
+            })
+          })
+        })).then(() => {
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    })
+  }
+
   async installNormalTemplate() {
     let spinner = spinnerStart('正在安装模板...')
     await sleep()
@@ -113,11 +146,14 @@ class InitCommand extends Command {
       spinner.stop(true)
       log.success('模板安装成功')
     }
+    const templateIgnore = this.templateInfo.ignore || []
+    const ignore = ['**/node_modules/**', ...templateIgnore]
+    await this.ejsRender({ ignore })
     // 依赖安装
     const { installCommand, startCommand } = this.templateInfo
-    await this.execCommand(installCommand, '依赖安装过程中失败')
+    await this.execCommand(installCommand, '依赖安装失败')
     // 启动命令执行
-    await this.execCommand(startCommand, '执行安装过程中失败')
+    await this.execCommand(startCommand, '启动执行命令失败')
   }
 
   async installCustomTemplate() {
@@ -203,7 +239,7 @@ class InitCommand extends Command {
         if (confirmDelete) {
           console.log('清空操作，', localPath)
           // 清空当前目录
-          // fse.emptyDirSync(localPath)
+          fse.emptyDirSync(localPath)
         }
       }
     }
@@ -212,6 +248,9 @@ class InitCommand extends Command {
 
   async getProjectInfo() {
     function isValidName(v) {
+      // 1.首字符必须为英文字符
+      // 2.尾字符必须为英文或数字，不能为字符
+      // 3.字符仅允许"-_"
       return /^[a-zA-Z]+([-][a-zA-Z][a-zA-Z0-9]*|[_][a-zA-Z][a-zA-Z0-9]*|[a-zA-Z0-9])*$/.test(v)
     }
 
@@ -236,7 +275,7 @@ class InitCommand extends Command {
       }],
     })
     log.verbose('type', type)
-    // this.template = this.template.filter(template => template.tag.includes(type))
+    this.template = this.template.filter(template => template.tag.includes(type))
     const title = type === TYPE_PROJECT ? '项目' : '组件'
     const projectNamePrompt = {
       type: 'input',
@@ -246,9 +285,6 @@ class InitCommand extends Command {
       validate: function(v) {
         const done = this.async()
         setTimeout(function() {
-          // 1.首字符必须为英文字符
-          // 2.尾字符必须为英文或数字，不能为字符
-          // 3.字符仅允许"-_"
           if (!isValidName(v)) {
             done(`请输入合法的${title}名称`)
             return
@@ -258,7 +294,7 @@ class InitCommand extends Command {
       },
       filter: function(v) {
         return v
-      },
+      }
     }
     const projectPrompt = []
     if (!isProjectNameValid) {
@@ -291,8 +327,9 @@ class InitCommand extends Command {
         type: 'list',
         name: 'projectTemplate',
         message: `请选择${title}模板`,
-        choices: this.createTemplateChoice(),
-      })
+        choices: this.createTemplateChoice()
+      }
+    )
     if (type === TYPE_PROJECT) {
       // 2. 获取项目的基本信息
       const project = await inquirer.prompt(projectPrompt)
@@ -316,7 +353,7 @@ class InitCommand extends Command {
             }
             done(null, true)
           }, 0)
-        },
+        }
       }
       projectPrompt.push(descriptionPrompt)
       // 2. 获取组件的基本信息
@@ -324,7 +361,7 @@ class InitCommand extends Command {
       projectInfo = {
         ...projectInfo,
         type,
-        ...component,
+        ...component
       }
     }
     // 生成classname

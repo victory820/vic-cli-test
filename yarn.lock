@@ -973,14 +973,6 @@
   "resolved" "https://registry.npmjs.org/@types/normalize-package-data/-/normalize-package-data-2.4.1.tgz"
   "version" "2.4.1"
 
-<<<<<<< HEAD
-"@vic-cli-test/core@^1.0.1":
-  "integrity" "sha512-V+3CWGQPP1T4O+RDeTfaE4LJH/saJgvH5XWNWHcP0TqtE2MxjYMslX8a4eBFFcq+DlBSNVS/6/bRdXBtCZ6r9A=="
-  "resolved" "https://registry.npmjs.org/@vic-cli-test/core/-/core-1.0.1.tgz"
-  "version" "1.0.1"
-
-=======
->>>>>>> d019013 (找回代码)
 "@zkochan/cmd-shim@^3.1.0":
   "integrity" "sha512-o8l0+x7C7sMZU3v9GuJIAU10qQLtwR1dtRQIOmlNMtyaqhmpXOzx1HWiYoWfmmf9HHZoAkXpc9TM9PQYF9d4Jg=="
   "resolved" "https://registry.npmjs.org/@zkochan/cmd-shim/-/cmd-shim-3.1.0.tgz"
