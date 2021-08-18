@@ -157,7 +157,25 @@ class InitCommand extends Command {
   }
 
   async installCustomTemplate() {
-    console.log('自定义模板')
+    // console.log('自定义模板', this.templateNpm)
+    if (await this.templateNpm.exists()) {
+      const rootFile = this.templateNpm.getRootFilePath()
+      if (fs.existsSync(rootFile)) {
+        log.notice('开始执行自定义模板')
+        const templatePath = path.resolve(this.templateNpm.cacheFilePath, 'template')
+        const options = {
+          templateInfo: this.templateInfo,
+          projectInfo: this.projectInfo,
+          sourcePath: templatePath,
+          targetPath: process.cwd()
+        }
+        const code = `require('${rootFile}')(${JSON.stringify(options)})`
+        await execAsync('node', ['-e', code], { stdio: 'inherit', cwd: process.cwd() })
+        log.success('自定义模板安装成功')
+      } else {
+        throw new Error('自定义模板入口文件不存在！')
+      }
+    }
   }
 
   async downloadTemplate() {
@@ -321,7 +339,7 @@ class InitCommand extends Command {
           } else {
             return v
           }
-        },
+        }
       },
       {
         type: 'list',
